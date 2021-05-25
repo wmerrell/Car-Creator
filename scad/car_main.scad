@@ -24,6 +24,7 @@
 $fn = 36 * 1;
 use<MCAD/regular_shapes.scad>
 use<../libraries/function_lib.scad>
+use<../libraries/floor.scad>
 use<../libraries/flatcar.scad>
 
 
@@ -50,7 +51,7 @@ Fish_Belly_Angle_Length_in_Feet=9.5;
 Pockets_per_Side=11;
 
 /* [Layout] */
-Space_Between_Deck_and_Body=8;
+Space_Between_Car_Parts=8;
 Show_Rivets = true;
 Use_Supports = false;
 
@@ -95,6 +96,7 @@ parameters=[
   ["side_sill_lo_height",           scaler(Scale, Side_Sill_Depth_in_Inches)],
   ["side_sill_hi_height",           scaler(Scale, Fish_Belly_Depth_in_Inches)],
   ["side_sill_angle_length",        scaler(Scale, Fish_Belly_Angle_Length_in_Feet*12)],
+  ["pockets_per_side",              Pockets_per_Side],
   ["pocket_spacing",                car_length/Pockets_per_Side],
   ["pocket_wall",                   [0.1, 0.25, 0.4, 0.75, 1.0, 2.0][Scale]],
   ["pocket_hole",                   [0.5, 0.75, 1.0, 1.5, 2, 4][Scale]],
@@ -110,7 +112,15 @@ parameters=[
   ["rivet_size2",                   scaler(Scale, 0.8)],
   ["rivet_offset",                  scaler(Scale, 5.0)],
   ["show_rivets",                   Show_Rivets],
+  ["brake_round",                   16],
+  ["brake_height",                  scaler(Scale, 8.0)],
+  ["brake_length1",                 scaler(Scale, 18.0)],
+  ["brake_length2",                 scaler(Scale, 24.0)],
+  ["brake_size1",                   scaler(Scale, 18.0)],
+  ["brake_size2",                   scaler(Scale, 5.0)],
+  ["brake_offset",                  scaler(Scale, 5.0)],
   ["supports",                      Use_Supports],
+  ["space_between_car_parts",       Space_Between_Car_Parts],
   ["0",                             0]
 ]; 
 

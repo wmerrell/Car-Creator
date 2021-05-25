@@ -20,22 +20,116 @@
 use<../libraries/function_lib.scad>
 use<../libraries/floor.scad>
 
+//
+// side_sill
+module side_sill(p, Ypos, orientation) {
+  if(orientation) {
+    hull() {
+      translate([center_sill_Xpos(p), Ypos, 0]) cube([center_sill_length(p), stringer_thickness(p), side_sill_lo_height(p)]);
+      translate([center_sill_Xpos(p)+side_sill_angle_length(p), Ypos, 0]) cube([center_sill_length(p)-side_sill_angle_length(p)*2,stringer_thickness(p), side_sill_hi_height(p)]);
+    }
+    translate([0, Ypos, 0]) cube([car_length(p), stringer_thickness(p), side_sill_lo_height(p)]);
+  } else {
+    hull() {
+      translate([center_sill_Xpos(p), Ypos, 0]) 
+        cube([center_sill_length(p), stringer_thickness(p), side_sill_lo_height(p)]);
+      translate([center_sill_Xpos(p)+side_sill_angle_length(p), Ypos, 0]) 
+        cube([center_sill_length(p)-side_sill_angle_length(p)*2, stringer_thickness(p), side_sill_hi_height(p)]);
+    }
+    translate([0, Ypos, 0]) 
+      cube([car_length(p), stringer_thickness(p), side_sill_lo_height(p)]);
+  }
+}
 
-// //
-// // car_body
-// module flat_car_body() {
-  
-//   side_sill(0,1);
-//   side_sill(car_width-stringer_thickness,0);
+//
+// pole_pocket
+module pole_pocket(p, Xpos, flip) {
+  translate([Xpos,0,0]) {
+    hull () {
+      cube([ stringer_thickness(p), side_sill_lo_height(p), deck_thickness(p)*1.5]);
+      cube([ stringer_thickness(p), side_sill_lo_height(p)*0.8, side_sill_lo_height(p)]);
+    }
+    if (flip) {
+      translate([stringer_thickness(p)+steel_thickness(p), (side_sill_lo_height(p)/2)-(steel_thickness(p)/2), side_sill_lo_height(p)/2]) {
+        difference() {
+          rotate([0, 270, 0]) 
+            cylinder(h=steel_thickness(p), d1=side_sill_lo_height(p)*0.7, d2=side_sill_lo_height(p)*0.8);
+          translate([steel_thickness(p)*0.7,0,0]) 
+            sphere(d=side_sill_lo_height(p)*0.7);
+        }
+      }
+    } else {
+      translate([-steel_thickness(p), (side_sill_lo_height(p)/2)-(steel_thickness(p)/2), side_sill_lo_height(p)/2]) {
+        difference() {
+          rotate([0, 90, 0]) 
+            cylinder(h=steel_thickness(p), d1=side_sill_lo_height(p)*0.7, d2=side_sill_lo_height(p)*0.8);
+          translate([-steel_thickness(p)*0.7,0,0]) 
+            sphere(d=side_sill_lo_height(p)*0.7);
+        }
+      }
+    }
+  }
+}
 
-//   for(x = [0 : 1 : Pockets_per_Side-1]) {
-//     pocket((x*pocket_spacing)+(pocket_spacing/2)+((pocket_hole-pocket_wall)/2), 0-pocket_hole-pocket_wall, 0);
-//     pocket((x*pocket_spacing)+(pocket_spacing/2)+((pocket_hole-pocket_wall)/2), car_width-pocket_wall, 0);
-//   }
-// }
+//
+// end_sill
+module end_sill(p, Xpos, flip) {
+  translate([Xpos, 0, 0]) 
+    cube([stringer_thickness(p), car_width(p), deck_thickness(p)*1.5]);
+  pole_pocket(p, Xpos, flip);
+  translate([0, car_width(p), 0]) mirror([0,1,0]) pole_pocket(p, Xpos, flip);
+}
+
+//
+// pocket
+module pocket(p, Xpos, Ypos, Zpos) {
+  difference() {
+    translate([Xpos-(pocket_hole(p)/2)-(pocket_wall(p)), Ypos, Zpos]) 
+      cube([pocket_hole(p)+(pocket_wall(p)*2), pocket_hole(p)+(pocket_wall(p)*2), pocket_depth(p)]);
+    translate([Xpos-(pocket_hole(p)/2), Ypos+(pocket_wall(p)), Zpos-(pocket_depth(p)/2)]) 
+      cube([pocket_hole(p), pocket_hole(p), (pocket_depth(p)*2)]);
+  }  
+}
+
+//
+// car_body
+module flat_car_body(p) {
+  side_sill(p, 0,1);
+  side_sill(p, car_width(p)-stringer_thickness(p),0);
+  end_sill(p, 0, false);
+  end_sill(p, car_length(p)-stringer_thickness(p), true);
+
+  for(x = [0 : 1 : pockets_per_side(p)-1]) {
+    pocket(p, (x*pocket_spacing(p))+(pocket_spacing(p)/2)+((pocket_hole(p)-pocket_wall(p))/2), 0-pocket_hole(p)-pocket_wall(p), 0);
+    pocket(p, (x*pocket_spacing(p))+(pocket_spacing(p)/2)+((pocket_hole(p)-pocket_wall(p))/2), car_width(p)-pocket_wall(p), 0);
+  }
+}
 
 
+//
+// deck_board
+module deck_board(p, Xpos) {
+  hull()
+    {
+      translate([Xpos, -space_between_car_parts(p)-car_width(p), deck_thickness(p)/8])  
+        cube([deck_board_length(p), deck_board_width(p), deck_board_depth(p)/16]);
+      translate([Xpos + (deck_board_length(p)/8), -space_between_car_parts(p)-car_width(p), (deck_thickness(p)/2)+(deck_board_depth(p)/4)]) 
+        cube([deck_board_length(p) - (deck_board_length(p)/4), deck_board_width(p), deck_board_depth(p)*0.75- (deck_board_depth(p)/4)]);
+    }
+}
 
+//
+// deck
+module deck(p) {
+  translate([0, -space_between_car_parts(p)-car_width(p), 0]) 
+    cube([car_length(p), car_width(p), deck_thickness(p)/4]);
+  for(Xpos = [0 : deck_board_length(p) : car_length(p)-(deck_board_length(p)/2)]) deck_board(p, Xpos);
+}
+
+//
+// flatcar
 module flatcar(p) {
   car_floor(p);
+  flat_car_body(p);
+  deck(p);
 }
