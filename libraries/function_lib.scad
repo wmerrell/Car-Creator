@@ -32,7 +32,10 @@ function gauge(list) = list[search(["gauge"],list)[0]][1];
 function car_type(list) = list[search(["car_type"],list)[0]][1];
 function car_length(list) = list[search(["car_length"],list)[0]][1];
 function car_width(list) = list[search(["car_width"],list)[0]][1];
+function car_height(list) = list[search(["car_height"],list)[0]][1];
 function deck_height(list) = list[search(["deck_height"],list)[0]][1];
+function deck_length(list) = list[search(["deck_length"],list)[0]][1];
+function deck_width(list) = list[search(["deck_width"],list)[0]][1];
 function deck_thickness(list) = list[search(["deck_thickness"],list)[0]][1];
 function bolster_length(list) = list[search(["bolster_length"],list)[0]][1];
 function bolster_width(list) = list[search(["bolster_width"],list)[0]][1];
@@ -55,6 +58,7 @@ function joist_space(list) = list[search(["joist_space"],list)[0]][1];
 function side_sill_lo_height(list) = list[search(["side_sill_lo_height"],list)[0]][1];
 function side_sill_hi_height(list) = list[search(["side_sill_hi_height"],list)[0]][1];
 function side_sill_angle_length(list) = list[search(["side_sill_angle_length"],list)[0]][1];
+function side_sill_thickness(list) = list[search(["side_sill_thickness"],list)[0]][1];
 function pockets_per_side(list) = list[search(["pockets_per_side"],list)[0]][1];
 function pocket_spacing(list) = list[search(["pocket_spacing"],list)[0]][1];
 function pocket_wall(list) = list[search(["pocket_wall"],list)[0]][1];
@@ -81,3 +85,12 @@ function brake_size2(list)  = list[search(["brake_size2"],list)[0]][1];
 function brake_offset(list) = list[search(["brake_offset"],list)[0]][1];
 function supports(list) = list[search(["supports"],list)[0]][1];
 function space_between_car_parts(list) = list[search(["space_between_car_parts"],list)[0]][1];
+function fudge_factor(list) = list[search(["fudge_factor"],list)[0]][1];
+
+
+
+//
+// support
+module support(Xpos, Ypos, hsize) {
+  translate([ Xpos, Ypos, 0]) cylinder(h=hsize, r1=0.5, r2=0.1, center=false);
+}

@@ -20,12 +20,6 @@
 use<../libraries/function_lib.scad>
 
 //
-// support
-module support(Xpos, Ypos, hsize) {
-  translate([ Xpos, Ypos, 0]) cylinder(h=hsize, r1=0.5, r2=0.1, center=false);
-}
-
-//
 // brake_cylinder
 module brake_cylinder (p) {
   color("gray") rotate([0, 90, 0]) {
@@ -81,61 +75,61 @@ module westinghouse_brakes (p) {
   cylinder_length = brake_length2(p)+(steel_thickness(p)*2)+brake_length1(p);
   reservoir_length = (brake_length2(p)*2)+steel_thickness(p);
 
-  translate([ (car_length(p)/2)+(cylinder_length/2), (car_width(p)/2)+center_sill_width(p), brake_size1(p)+steel_thickness(p)]) 
+  translate([ (deck_length(p)/2)+(cylinder_length/2), (deck_width(p)/2)+center_sill_width(p), brake_size1(p)+steel_thickness(p)]) 
     brake_cylinder(p);
-  translate([ (car_length(p)/2)-reservoir_length-(reservoir_length/3), (car_width(p)/2)-(center_sill_width(p)*1.5), brake_size1(p)+steel_thickness(p)]) 
+  translate([ (deck_length(p)/2)-reservoir_length-(reservoir_length/3), (deck_width(p)/2)-(center_sill_width(p)*1.5), brake_size1(p)+steel_thickness(p)]) 
     air_reservoir(p);
-  translate([ (car_length(p)/2)-reservoir_length-(reservoir_length/5), (car_width(p)/2)+(center_sill_width(p)*1.5), brake_size2(p)+deck_thickness(p)+steel_thickness(p)]) 
+  translate([ (deck_length(p)/2)-reservoir_length-(reservoir_length/5), (deck_width(p)/2)+(center_sill_width(p)*1.5), brake_size2(p)+deck_thickness(p)+steel_thickness(p)]) 
     triple_valve(p);
 
   // Add brake arms and connect brake_cylinder to the brake arm
-  translate([ (car_length(p)/2)+(cylinder_length*2.2), (car_width(p)/2)-(brake_length2(p)*0.9), brake_size1(p)]) 
+  translate([ (deck_length(p)/2)+(cylinder_length*2.2), (deck_width(p)/2)-(brake_length2(p)*0.9), brake_size1(p)]) 
     brake_arm (p);
-  translate([ (car_length(p)/2)-(cylinder_length*2.2), (car_width(p)/2)-(brake_length2(p)*0.9), brake_size1(p)]) 
+  translate([ (deck_length(p)/2)-(cylinder_length*2.2), (deck_width(p)/2)-(brake_length2(p)*0.9), brake_size1(p)]) 
     brake_arm (p);
-  translate([ (car_length(p)/2)+(cylinder_length*1.45), (car_width(p)/2)+center_sill_width(p), brake_size1(p)+steel_thickness(p)]) 
+  translate([ (deck_length(p)/2)+(cylinder_length*1.45), (deck_width(p)/2)+center_sill_width(p), brake_size1(p)+steel_thickness(p)]) 
     rotate([0, 90, 0]) {  
       color("gray") cylinder(h=brake_length2(p), d=steel_thickness(p));
     }
   
   // Hook up the brake arm rods
-  translate([ (car_length(p)/2)+(cylinder_length*2.2), (car_width(p)/2)-brake_length2(p)+(steel_thickness(p)*2), brake_size1(p)+steel_thickness(p)]) 
+  translate([ (deck_length(p)/2)+(cylinder_length*2.2), (deck_width(p)/2)-brake_length2(p)+(steel_thickness(p)*2), brake_size1(p)+steel_thickness(p)]) 
     rotate([0, 90, 0]) {  
       color("gray") cylinder(h=(center_sill_length(p)/2)-(cylinder_length*2.2), d=steel_thickness(p));
     }
-  translate([ (car_length(p)/2)-(cylinder_length*2.2)-(steel_thickness(p)*2), (car_width(p)/2), brake_size1(p)+steel_thickness(p)]) 
+  translate([ (deck_length(p)/2)-(cylinder_length*2.2)-(steel_thickness(p)*2), (deck_width(p)/2), brake_size1(p)+steel_thickness(p)]) 
     rotate([0, 90, 0]) {  
       color("gray") cylinder(h=(cylinder_length*4.4), d=steel_thickness(p));
     }
-  translate([ bolster_setback(p)+(bolster_length(p)/2), (car_width(p)/2)+center_sill_width(p), brake_size1(p)+steel_thickness(p)]) 
+  translate([ bolster_setback(p)+(bolster_length(p)), (deck_width(p)/2)+center_sill_width(p), brake_size1(p)+steel_thickness(p)]) 
     rotate([0, 90, 0]) {  
-      color("gray") cylinder(h=(center_sill_length(p)/2)-(cylinder_length*2.2), d=steel_thickness(p));
+      color("gray") cylinder(h=(center_sill_length(p)/2)-(cylinder_length*2.5), d=steel_thickness(p));
     }
 
   // Connect brake_cylinder to triple valve
-  translate([ (car_length(p)/2)-reservoir_length+(steel_thickness(p)*3), (car_width(p)/2)+center_sill_width(p), brake_size1(p)+steel_thickness(p)]) 
+  translate([ (deck_length(p)/2)-reservoir_length+(steel_thickness(p)*3), (deck_width(p)/2)+center_sill_width(p), brake_size1(p)+steel_thickness(p)]) 
     rotate([0, 90, 0]) {  
       color("red") cylinder(h=(brake_length2(p)*3.5), d=steel_thickness(p));
     }
-  translate([ (car_length(p)/2)-reservoir_length+(steel_thickness(p)*3), (car_width(p)/2)+center_sill_width(p), brake_size1(p)+steel_thickness(p)]) 
+  translate([ (deck_length(p)/2)-reservoir_length+(steel_thickness(p)*3), (deck_width(p)/2)+center_sill_width(p), brake_size1(p)+steel_thickness(p)]) 
     rotate([-90, 90, 0]) {  
       color("red") cylinder(h=(brake_length2(p)/2), d=steel_thickness(p));
     }
 
-  // 
-  translate([ (car_length(p)/2)-reservoir_length-(reservoir_length/3)+(brake_length2(p)/2), (car_width(p)/2)-(center_sill_width(p)*1.5), brake_size1(p)+steel_thickness(p)]) 
+  // Connect air reservoir to triple valve
+  translate([ (deck_length(p)/2)-reservoir_length-(reservoir_length/3)+(brake_length2(p)/2), (deck_width(p)/2)-(center_sill_width(p)*1.5), brake_size1(p)+steel_thickness(p)]) 
     rotate([-90, 90, 0]) {  
-      color("red") cylinder(h=car_width(p)*0.6, d=steel_thickness(p));
+      color("red") cylinder(h=deck_width(p)*0.7, d=steel_thickness(p));
     }
-  translate([ (car_length(p)/2)-reservoir_length-(reservoir_length/3)+(brake_length2(p)*0.8), (car_width(p)/2)-(center_sill_width(p)*1.5)+(brake_length2(p)*0.7), brake_size1(p)+steel_thickness(p)]) 
+  translate([ (deck_length(p)/2)-reservoir_length-(reservoir_length/3)+(brake_length2(p)*0.8), (deck_width(p)/2)-(center_sill_width(p)*1.5)+(brake_length2(p)*0.7), brake_size1(p)+steel_thickness(p)]) 
     rotate([-90, 90, 0]) {  
-      color("red") cylinder(h=(car_width(p)*0.5), d=steel_thickness(p));
+      color("red") cylinder(h=(deck_width(p)*0.5), d=steel_thickness(p));
     }
-  translate([ (car_length(p)/2)-reservoir_length-(reservoir_length/3)+(brake_length2(p)*1.5), (car_width(p)/2)-(center_sill_width(p)*1.5), brake_size1(p)+steel_thickness(p)]) 
+  translate([ (deck_length(p)/2)-reservoir_length-(reservoir_length/3)+(brake_length2(p)*1.5), (deck_width(p)/2)-(center_sill_width(p)*1.5), brake_size1(p)+steel_thickness(p)]) 
     rotate([-90, 90, 0]) {  
       color("red") cylinder(h=(brake_length2(p)*0.7), d=steel_thickness(p));
     }
-  translate([ (car_length(p)/2)-reservoir_length-(reservoir_length/3)+(brake_length2(p)*0.8), (car_width(p)/2)-(center_sill_width(p)*1.5)+(brake_length2(p)*0.7), brake_size1(p)+steel_thickness(p)]) 
+  translate([ (deck_length(p)/2)-reservoir_length-(reservoir_length/3)+(brake_length2(p)*0.8), (deck_width(p)/2)-(center_sill_width(p)*1.5)+(brake_length2(p)*0.7), brake_size1(p)+steel_thickness(p)]) 
     rotate([0, 90, 0]) {  
       color("red") cylinder(h=(brake_length2(p)*0.75), d=steel_thickness(p));
     }
@@ -146,7 +140,7 @@ module westinghouse_brakes (p) {
 // joist
 module joist(p, Xpos) {
   translate([Xpos, 0, deck_thickness(p)*2]) 
-    cube([stringer_thickness(p), car_width(p), stringer_depth(p)*1.25]);
+    cube([stringer_thickness(p), deck_width(p), stringer_depth(p)*1.25]);
 }
 
 //
@@ -194,28 +188,38 @@ module bolster(p, Xpos) {
 }
 
 module chassis(p) {
-  translate([0, 0, 0]) cube([car_length(p), car_width(p), deck_thickness(p)]);
-  translate([bolster_setback(p)+bolster_length(p), 0, deck_thickness(p)]) cube([center_sill_length(p), car_width(p), deck_thickness(p)]);
+  // main deck
+  translate([0, 0, 0]) 
+    cube([deck_length(p), deck_width(p), deck_thickness(p)]);
+  translate([bolster_setback(p)+bolster_length(p), 0, deck_thickness(p)]) 
+    cube([center_sill_length(p), deck_width(p), deck_thickness(p)]);
+
   bolster(p, bolster_setback(p));
-  bolster(p, car_length(p)-bolster_setback(p)-bolster_length(p));
+  bolster(p, deck_length(p)-bolster_setback(p)-bolster_length(p));
+
+  // Add Center sill, stringers, and joists
   center_sill (p, center_sill_Xpos(p), center_sill_Xpos(p)+center_sill_length(p));
   for(x = [1 : 1 : 3]) {
-    stringer(p, center_sill_Xpos(p),stringer_Ypos(p)*x,center_sill_length(p));
-    stringer(p, center_sill_Xpos(p),car_width(p)-(stringer_Ypos(p)*x),center_sill_length(p));
+    stringer(p, center_sill_Xpos(p), stringer_Ypos(p)*x, center_sill_length(p));
+    stringer(p, center_sill_Xpos(p), deck_width(p)-(stringer_Ypos(p)*x), center_sill_length(p));
   }
   for(x = [0 : 1 : 3]) {
     joist(p, center_sill_Xpos(p)+bolster_setback(p)+(joist_space(p)*x));
     joist(p, center_sill_Xpos(p)+center_sill_length(p)-bolster_setback(p)-(joist_space(p)*x));
   }
+
+  // Add brake hardware
   westinghouse_brakes (p);
 }
 
 module car_floor(p) {
   difference() {
     chassis(p);
-    translate([(car_length(p)/2)-(weight_length(p)/2), (car_width(p)/2)-(weight_width(p)/2), -0.1]) cube([weight_length(p), weight_width(p), weight_depth(p)+0.1]);
+    translate([(deck_length(p)/2)-(weight_length(p)/2), (deck_width(p)/2)-(weight_width(p)/2), -0.1]) cube([weight_length(p), weight_width(p), weight_depth(p)+0.1]);
   }
-  for(Xpos = [center_sill_Xpos(p)+support_x_spacing(p) : support_x_spacing(p) : center_sill_Xpos(p)+center_sill_length(p)-support_x_spacing(p)]) 
-    for(Ypos = [(car_width(p)/2)-(weight_width(p)/2)+(weight_width(p)/(support_y_spacing(p)*2)) : weight_width(p)/support_y_spacing(p): (car_width(p)/2)+(weight_width(p)/2)]) 
-      support(Xpos, Ypos, weight_depth(p));
+  if (supports(p)) {
+    for(Xpos = [center_sill_Xpos(p)+support_x_spacing(p) : support_x_spacing(p) : center_sill_Xpos(p)+center_sill_length(p)-support_x_spacing(p)]) 
+      for(Ypos = [(deck_width(p)/2)-(weight_width(p)/2)+(weight_width(p)/(support_y_spacing(p)*2)) : weight_width(p)/support_y_spacing(p): (deck_width(p)/2)+(weight_width(p)/2)]) 
+        support(Xpos, Ypos, weight_depth(p));
+  }
 }

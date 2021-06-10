@@ -25,19 +25,22 @@ use<../libraries/floor.scad>
 module side_sill(p, Ypos, orientation) {
   if(orientation) {
     hull() {
-      translate([center_sill_Xpos(p), Ypos, 0]) cube([center_sill_length(p), stringer_thickness(p), side_sill_lo_height(p)]);
-      translate([center_sill_Xpos(p)+side_sill_angle_length(p), Ypos, 0]) cube([center_sill_length(p)-side_sill_angle_length(p)*2,stringer_thickness(p), side_sill_hi_height(p)]);
+      translate([center_sill_Xpos(p), Ypos, 0]) 
+        cube([center_sill_length(p), side_sill_thickness(p), side_sill_lo_height(p)]);
+      translate([center_sill_Xpos(p)+side_sill_angle_length(p), Ypos, 0]) 
+        cube([center_sill_length(p)-side_sill_angle_length(p)*2, side_sill_thickness(p), side_sill_hi_height(p)]);
     }
-    translate([0, Ypos, 0]) cube([car_length(p), stringer_thickness(p), side_sill_lo_height(p)]);
+    translate([0, Ypos, 0]) 
+      cube([car_length(p), side_sill_thickness(p), side_sill_lo_height(p)]);
   } else {
     hull() {
       translate([center_sill_Xpos(p), Ypos, 0]) 
-        cube([center_sill_length(p), stringer_thickness(p), side_sill_lo_height(p)]);
+        cube([center_sill_length(p), side_sill_thickness(p), side_sill_lo_height(p)]);
       translate([center_sill_Xpos(p)+side_sill_angle_length(p), Ypos, 0]) 
-        cube([center_sill_length(p)-side_sill_angle_length(p)*2, stringer_thickness(p), side_sill_hi_height(p)]);
+        cube([center_sill_length(p)-side_sill_angle_length(p)*2, side_sill_thickness(p), side_sill_hi_height(p)]);
     }
     translate([0, Ypos, 0]) 
-      cube([car_length(p), stringer_thickness(p), side_sill_lo_height(p)]);
+      cube([car_length(p), side_sill_thickness(p), side_sill_lo_height(p)]);
   }
 }
 
@@ -75,9 +78,15 @@ module pole_pocket(p, Xpos, flip) {
 // end_sill
 module end_sill(p, Xpos, flip) {
   translate([Xpos, 0, 0]) 
-    cube([stringer_thickness(p), car_width(p), deck_thickness(p)*1.5]);
-  pole_pocket(p, Xpos, flip);
-  translate([0, car_width(p), 0]) mirror([0,1,0]) pole_pocket(p, Xpos, flip);
+    cube([side_sill_thickness(p), car_width(p), deck_thickness(p)*1.5]);
+  if(flip) {
+    adj = side_sill_thickness(p)-stringer_thickness(p);
+    pole_pocket(p, Xpos+adj, flip);
+    translate([0, car_width(p), 0]) mirror([0,1,0]) pole_pocket(p, Xpos+adj, flip);
+  } else {
+    pole_pocket(p, Xpos, flip);
+    translate([0, car_width(p), 0]) mirror([0,1,0]) pole_pocket(p, Xpos, flip);
+  }
 }
 
 //
@@ -92,12 +101,12 @@ module pocket(p, Xpos, Ypos, Zpos) {
 }
 
 //
-// car_body
+// flat_car_body
 module flat_car_body(p) {
   side_sill(p, 0,1);
-  side_sill(p, car_width(p)-stringer_thickness(p),0);
+  side_sill(p, car_width(p)-side_sill_thickness(p),0);
   end_sill(p, 0, false);
-  end_sill(p, car_length(p)-stringer_thickness(p), true);
+  end_sill(p, car_length(p)-side_sill_thickness(p), true);
 
   for(x = [0 : 1 : pockets_per_side(p)-1]) {
     pocket(p, (x*pocket_spacing(p))+(pocket_spacing(p)/2)+((pocket_hole(p)-pocket_wall(p))/2), 0-pocket_hole(p)-pocket_wall(p), 0);
@@ -129,7 +138,7 @@ module deck(p) {
 //
 // flatcar
 module flatcar(p) {
-  car_floor(p);
+  translate([side_sill_thickness(p)/2, side_sill_thickness(p)/2, 0]) car_floor(p);
   flat_car_body(p);
   deck(p);
 }
