@@ -42,12 +42,12 @@ Scale = 1;// [0:Z, 1:N, 2:HO, 3:S, 4:O, 5:G]
 Car_Type = 0;// [0:Flat Car, 1:Depressed Flat Car, 2:Gondola, 3:Box Car, 4:Reefer]
 Car_Length_in_Feet=49.5;
 Car_Width_in_Feet=9.5;
-Car_Height_in_Feet=6.5;
+Car_Height_in_Feet=5.5;
 Deck_Height_in_Inches=44.5;
 
 /* [Car Features] */
 Side_Sill_Depth_in_Inches=18.0;
-Side_Sill_Thickness_in_Inches=6.0;
+Side_Sill_Thickness_in_Inches=5.5;
 Fish_Belly_Depth_in_Inches=35.0;
 Fish_Belly_Angle_Length_in_Feet=9.5;
 Pockets_per_Side=11;
@@ -115,8 +115,8 @@ parameters=[
   ["pocket_depth",                  [1.0, 1.5, 2.0, 4.0, 6.0, 8.0][Scale]],
   ["support_x_spacing",             center_sill_length/20],
   ["support_y_spacing",             3],
-  ["deck_board_length",             car_length/[50, 75, 100, 125, 125, 125][Scale]],
-  ["deck_board_width",              car_width],
+  ["deck_board_length",             deck_length/[50, 75, 100, 125, 125, 125][Scale]],
+  ["deck_board_width",              deck_width],
   ["deck_board_depth",              [0.125, 0.2, 0.35, 0.5, 0.75, 1.0][Scale]],
   ["steel_thickness",               scaler(Scale, [3.0, 2.5, 1.75, 1.5, 1, 1][Scale])],
   ["rivet_round",                   16],
