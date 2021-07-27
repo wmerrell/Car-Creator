@@ -17,7 +17,7 @@
 // If not, see <https://www.gnu.org/licenses/>.
 //
 
-use<../libraries/function_lib.scad>
+use<function_lib.scad>
 
 //
 // brake_cylinder
@@ -178,12 +178,50 @@ module bolster(p, Xpos) {
       hull()
       {
         cube([bolster_length(p), bolster_width(p), deck_thickness(p)]);
-        translate([0,(bolster_width(p)/2)-(bolster_length(p)/2),deck_thickness(p)]) 
-          cube([bolster_length(p), bolster_length(p), bolster_depth(p)]);
+        translate([0, (bolster_width(p)/2)-(bolster_length(p)/2), deck_thickness(p)]) 
+          cube([bolster_length(p), bolster_length(p), bolster_height(p)]);
       }
     }
     translate([Xpos+(bolster_length(p)/2), (bolster_width(p)/2), deck_thickness(p)])
       cylinder(h=30, r=bolster_pin_radius(p), center=true);
+  }
+}
+
+//
+// coupler_mount
+module coupler_mount(p, Xpos, Xlen, Ypos, Ylen, Zheight, Aend) {
+  if (Aend) {
+    // Add center sill extension
+    difference() {
+      translate([Xpos+coupler_length(p), (bolster_width(p)/2)-(center_sill_width(p)/2), 0]) 
+        cube([bolster_setback(p)-coupler_length(p)+side_sill_thickness(p), center_sill_width(p), center_sill_lo_depth(p)]);
+      translate([Xpos+coupler_length(p), (bolster_width(p)/2)-(center_sill_width(p)/2)+(center_sill_thickness(p)/2), 0]) 
+        cube([bolster_setback(p)-coupler_length(p)+fudge_factor(p)+side_sill_thickness(p), center_sill_width(p)-center_sill_thickness(p), center_sill_lo_depth(p)+deck_thickness(p)]);
+    }
+    difference() {
+      // Add the coupler mounting pad  
+      translate([Xpos, Ypos, 0]) 
+        cube([Xlen, Ylen, Zheight]);
+      // Add the coupler mount screw hole
+      translate([Xpos+coupler_mount_hole_setback(p), Ypos+(Ylen/2), Zheight])
+        cylinder(h=30, r=coupler_mount_hole_radius(p), center=true);
+    }
+  } else {
+    // Add center sill extension
+    difference() {
+      translate([Xpos-bolster_setback(p)-side_sill_thickness(p), (bolster_width(p)/2)-(center_sill_width(p)/2), 0]) 
+        cube([bolster_setback(p)-coupler_length(p)+side_sill_thickness(p), center_sill_width(p), center_sill_lo_depth(p)]);
+      translate([Xpos-bolster_setback(p)-side_sill_thickness(p), (bolster_width(p)/2)-(center_sill_width(p)/2)+(center_sill_thickness(p)/2), 0]) 
+        cube([bolster_setback(p)-coupler_length(p)+side_sill_thickness(p), center_sill_width(p)-center_sill_thickness(p), center_sill_lo_depth(p)+deck_thickness(p)]);
+    }
+    difference() {
+      // Add the coupler mounting pad  
+      translate([Xpos-Xlen, Ypos, 0]) 
+        cube([Xlen, Ylen, Zheight]);
+      // Add the coupler mount screw hole
+      translate([Xpos-coupler_mount_hole_setback(p), Ypos+(Ylen/2), Zheight])
+        cylinder(h=30, r=coupler_mount_hole_radius(p), center=true);
+    }
   }
 }
 
@@ -196,6 +234,15 @@ module chassis(p) {
 
   bolster(p, bolster_setback(p));
   bolster(p, deck_length(p)-bolster_setback(p)-bolster_length(p));
+
+  if (body_mounts(p)) {
+    echo("Use Body Mounts");
+    mount_height = truck_height(p) + bolster_height(p) - coupler_mount_height(p) + deck_thickness(p);
+    echo(truck_height=truck_height(p), bolster_height=bolster_height(p), coupler_mount_height=coupler_mount_height(p));
+    echo(mount_height=mount_height);
+    coupler_mount(p, -side_sill_thickness(p), coupler_length(p), (deck_width(p)/2)-(coupler_width(p)/2), coupler_width(p), mount_height, true);
+    coupler_mount(p, deck_length(p)+side_sill_thickness(p), coupler_length(p), (deck_width(p)/2)-(coupler_width(p)/2), coupler_width(p), mount_height, false);
+  }
 
   // Add Center sill, stringers, and joists
   center_sill (p, center_sill_Xpos(p), center_sill_Xpos(p)+center_sill_length(p));
@@ -213,13 +260,15 @@ module chassis(p) {
 }
 
 module car_floor(p) {
+  adj = bolster_length(p)*0.5;
   difference() {
     chassis(p);
-    translate([(deck_length(p)/2)-(weight_length(p)/2), (deck_width(p)/2)-(weight_width(p)/2), -0.1]) cube([weight_length(p), weight_width(p), weight_depth(p)+0.1]);
+    translate([(deck_length(p)/2)-(weight_length(p)/2)-adj, (deck_width(p)/2)-(weight_width(p)/2), -0.1]) 
+      cube([weight_length(p)+(adj*2), weight_width(p), weight_depth(p)+0.1]);
   }
   if (supports(p)) {
-    for(Xpos = [center_sill_Xpos(p)+support_x_spacing(p) : support_x_spacing(p) : center_sill_Xpos(p)+center_sill_length(p)-support_x_spacing(p)]) 
-      for(Ypos = [(deck_width(p)/2)-(weight_width(p)/2)+(weight_width(p)/(support_y_spacing(p)*2)) : weight_width(p)/support_y_spacing(p): (deck_width(p)/2)+(weight_width(p)/2)]) 
+    for(Xpos = [center_sill_Xpos(p)+support_x_spacing(p)-adj : support_x_spacing(p) : center_sill_Xpos(p)+center_sill_length(p)-support_x_spacing(p)+(adj*2)]) 
+      for(Ypos = [(deck_width(p)/2)-(weight_width(p)/2)+(support_y_spacing(p)/2) : support_y_spacing(p) : (deck_width(p)/2)+(weight_width(p)/2)-(support_y_spacing(p)/2)]) 
         support(Xpos, Ypos, weight_depth(p));
   }
 }
