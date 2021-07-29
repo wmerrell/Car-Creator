@@ -236,12 +236,12 @@ module chassis(p) {
   bolster(p, deck_length(p)-bolster_setback(p)-bolster_length(p));
 
   if (body_mounts(p)) {
-    echo("Use Body Mounts");
+    echo("Using Body Mounts");
     mount_height = truck_height(p) + bolster_height(p) - coupler_mount_height(p) + deck_thickness(p);
     echo(truck_height=truck_height(p), bolster_height=bolster_height(p), coupler_mount_height=coupler_mount_height(p));
     echo(mount_height=mount_height);
-    coupler_mount(p, -side_sill_thickness(p), coupler_length(p), (deck_width(p)/2)-(coupler_width(p)/2), coupler_width(p), mount_height, true);
-    coupler_mount(p, deck_length(p)+side_sill_thickness(p), coupler_length(p), (deck_width(p)/2)-(coupler_width(p)/2), coupler_width(p), mount_height, false);
+    color("LightBlue") coupler_mount(p, -side_sill_thickness(p), coupler_length(p), (deck_width(p)/2)-(coupler_width(p)/2), coupler_width(p), mount_height, true);
+    color("LightBlue") coupler_mount(p, deck_length(p)+side_sill_thickness(p), coupler_length(p), (deck_width(p)/2)-(coupler_width(p)/2), coupler_width(p), mount_height, false);
   }
 
   // Add Center sill, stringers, and joists

@@ -43,8 +43,6 @@ Car_Type = 1;// [0:Flat Car, 1:Gondola, 2:Box Car, 3:Reefer]
 Car_Length_in_Feet=35.5;
 Car_Width_in_Feet=9.5;
 Car_Height_in_Feet=5.5;
-Truck_Height_in_Inches=27.1875;
-Bolster_Height_in_Inches=17.6;
 
 /* [Car Features] */
 Side_Sill_Depth_in_Inches=18.0;
@@ -52,13 +50,15 @@ Side_Sill_Thickness_in_Inches=5.5;
 Fish_Belly_Depth_in_Inches=35.0;
 Fish_Belly_Angle_Length_in_Feet=9.5;
 Pockets_per_Side=7;
+Truck_Height_in_Inches=27.1875;
+Bolster_Height_in_Inches=17.6;
 Use_Body_Mount_Couplers = true;
 
 /* [Layout] */
 Space_Between_Car_Parts=8;
+Fudge_Factor_in_Inches = 2;
 Show_Rivets = true;
 Use_Supports = false;
-Fudge_Factor_in_Inches = 2;
 
 //
 // REMAINING PARAMETERS
@@ -98,7 +98,6 @@ parameters=[
   ["bolster_height",                bolster_height],
   ["bolster_setback",               bolster_setback],
   ["bolster_pin_radius",            [0.75, 1.0, 0.9, 2.1, 2.4, 3][Scale]],
-  ["truck_height",                  truck_height],
   ["weight_width",                  [5, 12, 23, 20, 40, 80][Scale]],
   ["weight_depth",                  [0.3, 0.95, 1, 2, 3, 5][Scale]],
   ["weight_length",                 car_length-((bolster_setback*2)+bolster_length*2)],
@@ -140,11 +139,12 @@ parameters=[
   ["brake_size1",                   scaler(Scale, 18.0)],
   ["brake_size2",                   scaler(Scale, 5.0)],
   ["brake_offset",                  scaler(Scale, 5.0)],
-  ["coupler_mount_height",          [4.5, 5.5, 11.5, 16.5, 22.0, 30.0][Scale]],
-  ["coupler_length",                [6.5, 8.0, 11.6, 22.5, 30.0, 45.0][Scale]],
-  ["coupler_width",                 [6.5, 9.0, 7.6, 10.0, 15.0, 20.0][Scale]],
-  ["coupler_mount_hole_radius",     [0.5, 0.75, 0.9, 2.0, 3.0, 4.0][Scale]],
-  ["coupler_mount_hole_setback",    [3.5, 4.0, 5.28, 10.0, 15.0, 20.0][Scale]],
+  ["truck_height",                  truck_height],
+  ["coupler_mount_height",          [4.5, 7.1, 11.5, 16.5, 22.0, 30.0][Scale]],
+  ["coupler_length",                [5.2, 5.2, 11.6, 22.5, 30.0, 45.0][Scale]],
+  ["coupler_width",                 [3.7, 3.7, 7.6, 10.0, 15.0, 20.0][Scale]],
+  ["coupler_mount_hole_radius",     [0.5, 0.6, 0.9, 2.0, 3.0, 4.0][Scale]],
+  ["coupler_mount_hole_setback",    [3.0, 3.2, 5.28, 10.0, 15.0, 20.0][Scale]],
   ["body_mounts",                   Use_Body_Mount_Couplers],
   ["supports",                      Use_Supports],
   ["space_between_car_parts",       Space_Between_Car_Parts],

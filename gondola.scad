@@ -165,6 +165,29 @@ module rib(p, Xpos, Ypos, Zpos, height) {
 }
 
 //
+// step
+// head is a boolean that says whether the step is on the zero end or the car_length end.
+// right is a boolean that says whether the step is on the zero side or the car_width side.
+// step(p, car_length, car_width, true, true) will create the step at the far side and at the far end from 0, 0
+module step (p, Xpos, Ypos, Zpos, head, right) {
+  step_depth = (center_sill_hi_depth(p)*0.8);
+  step_length = (bolster_setback(p)/3);
+  Xadj = head ? 0 : -step_length;
+  Yadj = right ? -steel_thickness(p) : steel_thickness(p);
+  ladder = (car_height(p)-side_sill_lo_height(p))/2;
+  translate([Xpos+Xadj, Ypos+Yadj, Zpos])  
+    cube([steel_thickness(p), side_sill_thickness(p), step_depth]);
+  translate([Xpos+Xadj, Ypos+Yadj, Zpos+step_depth])  
+    cube([step_length, side_sill_thickness(p), steel_thickness(p)]);
+  translate([Xpos+step_length-steel_thickness(p)+Xadj, Ypos+Yadj, Zpos])  
+    cube([steel_thickness(p), side_sill_thickness(p), step_depth]);
+  translate([Xpos+Xadj, Ypos+(Yadj*2), Zpos])  
+    cube([step_length, side_sill_thickness(p), steel_thickness(p)]);
+  translate([Xpos+Xadj, Ypos+(Yadj*2), ladder])  
+    cube([step_length, side_sill_thickness(p), steel_thickness(p)]);
+}
+
+//
 // gondola_car_body
 module gondola_car_body(p) {
   Xlen = deck_length(p)+(side_sill_thickness(p)/2)+(fudge_factor(p)*2);
@@ -183,6 +206,11 @@ module gondola_car_body(p) {
     rib(p, (x*pocket_spacing(p)), -side_sill_thickness(p), 0, car_height(p));
     rib(p, (x*pocket_spacing(p)), deck_width(p)+side_sill_thickness(p)+(fudge_factor(p)*2), 0, car_height(p));
   }
+
+  step(p, 0, 0, car_height(p)-side_sill_lo_height(p), true, true);
+  step(p, 0, deck_width(p)+side_sill_thickness(p)+fudge_factor(p), car_height(p)-side_sill_lo_height(p), true, false);
+  step(p, deck_length(p)+side_sill_thickness(p)+(fudge_factor(p)*2), 0, car_height(p)-side_sill_lo_height(p), false, true);
+  step(p, deck_length(p)+side_sill_thickness(p)+(fudge_factor(p)*2), deck_width(p)+side_sill_thickness(p)+fudge_factor(p), car_height(p)-side_sill_lo_height(p), false, false);
 
   if (supports(p)) {
     support_height = car_height(p)-side_sill_lo_height(p);
