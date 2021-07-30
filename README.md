@@ -1,4 +1,4 @@
-# Car-Creator
+# Customizable Car Creator
  Create Custom Railroad Freight Cars
 
 ## Summary
@@ -7,8 +7,10 @@ When you make trees for your layout, some are very detailed used as a focus poin
 
 This program has a lot of parameters. I have tried to make the default values be pretty good choices for most of them. I model in N-Scale so most choices are ones that produce cars that I like in N-Scale. I have also tested fairly thourghly in HO Scale. I print on a resin printer so size is limited. Z, S, O, and G Scales are supported, but many of the values have not been tested and may not even work. Feel free to make changes to support other scales that I have not gotten around to. If you do, please report back to me so that your better values can be incorporated into the main code.
 
+Trucks and couplers are not included in these designs. These all are intended to use regular comercial trucks and couplers such as Kadee or MicroTrains trucks and couplers. The standard mounting techniques should work as expected.
+
 ## Printing
-I have the best luck printing these on a resin printer directly on the build plate without any extra supports beyond the ones that are supplied if _Use Supports_ is turned on. I have not tested them on a FDM printer. If you do, let me know how it turns out. 
+I have the best luck printing these on a resin printer directly on the build plate without any extra supports beyond the ones that are supplied if _Use Supports_ is turned on. I have tested these at 0.025 mm layer height. I have not tested them on a FDM printer. If you do, let me know how it turns out. 
 
 ## Parameters
 The default values are ones that I think make a good looking car. You can choose what you like. Most are self explainitory. 
@@ -41,3 +43,7 @@ These control things about generating the model for printing.
   * **_Fudge Factor in Inches_**: Adds a small additional space to the walls of the model so that the floor can fit between them. This is needed because 3d printers often have a little spread around the parts. I use about 2 inches.
   * **_Show Rivets_**: This is not currently implemented. 
   * **_Use Supports_**: This controls whether the supports are generated. For printing on a resin printer it is best to have this turned on. When using an FDM it might be best to turn it off. If this is off, the user will need to supply supports where needed.
+
+
+# Asking for help
+If you like these, please help by letting me know what is not right on these models. If you find something that is not right on these please tell me so that I can fix it.
